@@ -26,6 +26,18 @@ db.prepare(`
   )
 `).run();
 
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS logs_lixeiras (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    identificador_unico TEXT NOT NULL,
+    nome TEXT NOT NULL,
+    nivel_atual_ocupacao REAL NOT NULL,
+    status_tampa TEXT NOT NULL,
+    tempo_aberta_segundos REAL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`).run();
+
 const Lixeira = {
   listarLixeiras() {
     return db.prepare(`SELECT * FROM lixeiras`).all();
@@ -86,4 +98,22 @@ const User = {
   }
 };
 
-module.exports = { User, Lixeira };
+const LogLixeira = {
+  registrarLog(dados) {
+    const { id_lixeira, nome, porcentagem_cheia, tampa_aberta, tempo_aberta_segundos } = dados;
+    
+    const status_tampa = tampa_aberta ? 'aberta' : 'fechada';
+
+    return db.prepare(`
+      INSERT INTO logs_lixeiras (
+        identificador_unico, nome, nivel_atual_ocupacao, status_tampa, tempo_aberta_segundos
+      ) VALUES (?, ?, ?, ?, ?)
+    `).run(id_lixeira, nome, porcentagem_cheia, status_tampa, tempo_aberta_segundos);
+  },
+
+  obterTodosLogs() {
+    return db.prepare(`SELECT * FROM logs_lixeiras ORDER BY data_hora DESC`).all();
+  }
+};
+
+module.exports = { User, Lixeira, LogLixeira };

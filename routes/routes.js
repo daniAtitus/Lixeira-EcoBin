@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { User, Lixeira } = require("../models/database")
+const { User, Lixeira, LogLixeira } = require("../models/database")
 
 router.use(express.json())
 
@@ -100,6 +100,37 @@ router.put("/lixeiras/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ erro: "Erro ao atualizar lixeira" });
+  }
+});
+
+router.post("/lixeiras/log", async (req, res) => {
+  try {
+    LogLixeira.registrarLog(req.body);
+    res.status(201).json({mensagem: "Log registrado com sucesso"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao registrar log" });
+  }
+});
+
+router.get("/lixeiras/log/exportar", async (req, res) => {
+  try {
+    const logs = await LogLixeira.obterTodosLogs();
+
+    if (logs.length === 0) {
+      return res.status(404).send("Nenhum log encontrado para exportação");
+    }
+
+    const cabecalhos = Object.keys(logs[0]).join(";");
+    const linhas = logs.map(log=> Object.values(log).join(";"));
+    const csv = [cabecalhos, ...linhas].join("\n");
+
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", "attachment; filename=historico_lixeiras.csv");
+    res.send(csv);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao exportar logs" });
   }
 });
 
