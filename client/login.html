@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoBin Smart - Login</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #0f172a, #064e3b);
+      overflow:hidden;
+    }
+
+    .background{
+      position:absolute;
+      width:100%;
+      height:100%;
+      background:
+        radial-gradient(circle at top left, rgba(16,185,129,0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(34,197,94,0.20), transparent 30%);
+      z-index:0;
+    }
+
+    .login-container{
+      position:relative;
+      z-index:1;
+      width:900px;
+      max-width:95%;
+      height:520px;
+      display:flex;
+      border-radius:20px;
+      overflow:hidden;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    .left-side{
+      flex:1;
+      background: linear-gradient(160deg, #10b981, #065f46);
+      color:white;
+      padding:50px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+
+    .left-side h1{
+      font-size:42px;
+      margin-bottom:20px;
+    }
+
+    .left-side p{
+      font-size:18px;
+      line-height:1.6;
+      opacity:0.9;
+    }
+
+    .trash-icon{
+      font-size:90px;
+      margin-bottom:25px;
+    }
+
+    .right-side{
+      flex:1;
+      background:#ffffff;
+      padding:60px 50px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .right-side h2{
+      color:#065f46;
+      margin-bottom:10px;
+      font-size:32px;
+    }
+
+    .subtitle{
+      color:#64748b;
+      margin-bottom:35px;
+    }
+
+    .input-group{
+      margin-bottom:22px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:8px;
+      color:#334155;
+      font-weight:bold;
+    }
+
+    .input-group input{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      background:#f1f5f9;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    .input-group input:focus{
+      outline:none;
+      border:2px solid #10b981;
+      background:white;
+    }
+
+    .login-btn{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+      margin-top:10px;
+    }
+
+    .login-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(16,185,129,0.4);
+    }
+
+    .links{
+      margin-top:20px;
+      display:flex;
+      justify-content:space-between;
+      font-size:14px;
+    }
+
+    .links a{
+      text-decoration:none;
+      color:#059669;
+      font-weight:bold;
+    }
+
+    .links a:hover{
+      text-decoration:underline;
+    }
+
+    @media(max-width: 768px){
+      .login-container{
+        flex-direction:column;
+        height:auto;
+      }
+
+      .left-side{
+        padding:30px;
+      }
+
+      .right-side{
+        padding:40px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="background"></div>
+
+  <div class="login-container">
+
+    <div class="left-side">
+      <div class="trash-icon">🗑️</div>
+      <h1>EcoBin Smart</h1>
+      <p>
+        Sistema inteligente de monitoramento de lixeiras urbanas,
+        coleta sustentável e gestão ambiental em tempo real.
+      </p>
+    </div>
+
+    <div class="right-side">
+      <h2>Bem-vindo</h2>
+      <p class="subtitle">
+        Faça login para acessar o painel inteligente.
+      </p>
+
+      <form>
+        <div class="input-group">
+          <label>E-mail</label>
+          <input type="email" placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="input-group">
+          <label>Senha</label>
+          <input type="password" placeholder="Digite sua senha">
+        </div>
+
+        <button class="login-btn">
+          Entrar
+        </button>
+
+        <div class="links">
+          <a href="#">Esqueci minha senha</a>
+          <a href="#">Criar conta</a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</body>
+</html>
