@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel EcoBin Smart</title>
   
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
   <style>
 
     *{
@@ -188,14 +190,15 @@
   }
 
   #mapa-central{
-  display:none;
-  width: 1100px;
-  height: 700px;
-  margin: 0 auto;
-  overflow-y: auto;
-  position: absolute;
-  border-radius: 5px;
-  margin-left: 17%;
+    display:none;
+    width: 1100px;
+    height: 600px;
+    margin: 0 auto;
+    overflow-y: auto;
+    position: absolute;
+    border-radius: 5px;
+    margin-left: 17%;
+    border: 3px solid black;
 }
 
 .ativa-mapa{
@@ -340,6 +343,10 @@
         📋 Listar Lixeiras
       </div>
 
+      <div class="menu-item" id = "mapa" onclick="mostrar('mapa-central')">
+        🗺️ Mapa
+      </div>
+
       <div class="menu-item" id = "cadastrar-lixeira" onclick="mostrar('form-lixeira')">
         ➕ Cadastrar Lixeira
       </div>
@@ -348,9 +355,7 @@
            👤 Cadastrar usuário
       </div>
 
-      <div class="menu-item" id = "mapa" onclick="mostrar('mapa-central')">
-        🗺️ Mapa
-      </div>
+
 
     </div>
 
@@ -534,11 +539,16 @@
   </div>
 
   <div id="mapa-central">
-        <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        
     </div>
 
     <script src = "script-buttons/script.js"></script>
+  
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
     <script src = "./map.js"></script>
+    <script src = "fetch-lixeira/lixeira.js"></script>
+    
 </body>
 </html>

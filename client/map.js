@@ -1,37 +1,56 @@
-const map = L.map('mapa-central').setView([-28.3875, -53.9147], 15);
+const map = L.map('mapa-central');
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap'
+  attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-async function buscaLixeiras() {
-  const rota = "http://localhost:8080/lixeiras";
+async function buscaMapa() {
+  try {
+    const response = await fetch("http://localhost:8080/lixeiras");
 
-  const response = await fetch(rota);
+    if (!response.ok) {
+      throw new Error(`Response Status: ${response.status}`);
+    }
 
-  if (!response.ok) {
-    throw new Error(`Erro HTTP: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    return [];
   }
-
-  return await response.json();
 }
 
-async function init() {
-  const lixeiras = await buscaLixeiras();
+async function exibeLixeiras() {
+  const lixeiras = await buscaMapa();
+
+  const bounds = [];
 
   lixeiras.forEach(lixeira => {
-    const lat = lixeira.latitude;
-    const lng = lixeira.longitude;
+    const lat = Number(lixeira.latitude);
+    const lng = Number(lixeira.longitude);
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    bounds.push([lat, lng]);
+
+    const popup = `
+      <b>${lixeira.nome}</b><br>
+      <b>ID:</b> ${lixeira.identificador_unico}<br>
+      <b>Status tampa:</b> ${lixeira.status_tampa}<br>
+      <b>Status operacional:</b> ${lixeira.status_operacional}<br>
+      <b>Capacidade:</b> ${lixeira.capacidade_total_estimada}<br>
+      <b>Ocupação atual:</b> ${lixeira.nivel_atual_ocupacao}%
+    `;
 
     L.marker([lat, lng])
       .addTo(map)
-      .bindPopup(`
-        <b>${lixeira.nome}</b><br>
-        Ocupação: ${lixeira.nivel_atual_ocupacao}%<br>
-        Tampa: ${lixeira.status_tampa}<br>
-        Status: ${lixeira.status_operacional}
-      `);
+      .bindPopup(popup);
   });
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds);
+  } else {
+    map.setView([-28.223, -53.501], 13);
+  }
 }
 
-init();
+exibeLixeiras();

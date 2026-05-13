@@ -22,5 +22,9 @@ function mostrar(idDiv){
     }
     if(idDiv === 'mapa-central'){
         mapa.classList.add('ativa-mapa')
+
+        setTimeout(() => {
+        map.invalidateSize();
+        }, 200);
     }
 }
