@@ -113,6 +113,24 @@ router.post("/lixeiras/log", async (req, res) => {
   }
 });
 
+router.delete("/lixeiras/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existente = await Lixeira.listarLixeiraEspecifica(id);
+    if (!existente) {
+      return res.status(404).json({ erro: "Lixeira não encontrada" });
+    }
+
+    await Lixeira.deletarLixeira(id);
+    res.json({ mensagem: "Lixeira excluída com sucesso" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao excluir lixeira" });
+  }
+});
+
+
 router.get("/lixeiras/log/exportar", async (req, res) => {
   try {
     const logs = await LogLixeira.obterTodosLogs();

@@ -275,6 +275,210 @@
       box-shadow: 0 8px 20px rgba(16,185,129,0.3);
     }
 
+    /* ── Botões de ação na tabela ── */
+    .btn-acao {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-editar {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .btn-editar:hover {
+      background: #bfdbfe;
+      transform: translateY(-1px);
+    }
+
+    .btn-deletar {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-deletar:hover {
+      background: #fca5a5;
+      transform: translateY(-1px);
+    }
+
+    /* ── Modal base ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.aberto {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 36px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      animation: modalEntrar 0.25s ease;
+    }
+
+    @keyframes modalEntrar {
+      from { opacity: 0; transform: translateY(-20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-box h3 {
+      color: #065f46;
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .modal-box p.modal-sub {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .modal-box .campo {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-box label {
+      color: #065f46;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .modal-box input,
+    .modal-box select {
+      padding: 12px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .modal-box input:focus,
+    .modal-box select:focus {
+      border-color: #10b981;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+    }
+
+    .modal-acoes {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    .btn-cancelar {
+      padding: 12px 22px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: white;
+      color: #374151;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-cancelar:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-confirmar {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-confirmar:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-confirmar-deletar {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+    }
+
+    /* ── Modal de confirmação de exclusão ── */
+    #modal-confirmar-deletar .modal-box {
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .icone-aviso {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    #modal-confirmar-deletar h3 {
+      font-size: 20px;
+    }
+
+    #modal-confirmar-deletar p {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    #modal-confirmar-deletar .modal-acoes {
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    /* ── Toast de feedback ── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      z-index: 2000;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+
+    #toast.visivel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #toast.sucesso { background: #059669; }
+    #toast.erro    { background: #dc2626; }
+
+    /* ── Formulários existentes ── */
     #form-lixeira-container {
       max-width: 620px;
       margin: 0 auto;
@@ -402,7 +606,6 @@
   <div id="painel">
 
     <div id="menu">
-
       <div id="logo">
         <div style="font-size:70px;">🗑️</div>
         <h1>EcoBin</h1>
@@ -412,25 +615,21 @@
       <button class="menu-item active" onclick="mostrar('dashboard')">
         📋 Listar Lixeiras
       </button>
-
       <button class="menu-item" onclick="mostrar('mapa')">
         🗺️ Mapa
       </button>
-
       <button class="menu-item" onclick="mostrar('cadastrar-lixeira')">
         ➕ Cadastrar Lixeira
       </button>
-
       <button class="menu-item" onclick="mostrar('cadastrar-usuario')">
         👤 Cadastrar Usuário
       </button>
-
     </div>
 
     <div id="conteudo">
 
+      <!-- DASHBOARD -->
       <div id="view-dashboard" class="view ativa">
-
         <div id="topo">
           <h2>Dashboard</h2>
           <p>Monitoramento inteligente das lixeiras urbanas</p>
@@ -459,9 +658,9 @@
         </div>
 
         <button class="botao" onclick="carregarLixeiras()">🔄 Recarregar</button>
-
       </div>
 
+      <!-- MAPA -->
       <div id="view-mapa" class="view">
         <div id="topo">
           <h2>Mapa</h2>
@@ -470,50 +669,42 @@
         <div id="mapa-central"></div>
       </div>
 
+      <!-- CADASTRAR LIXEIRA -->
       <div id="view-cadastrar-lixeira" class="view">
         <div id="topo">
           <h2>Cadastrar Lixeira</h2>
           <p>Adicione uma nova lixeira ao sistema</p>
         </div>
-
         <div id="form-lixeira-container">
           <form action="/lixeiras" method="POST" id="formCadastroLixeira">
-
             <div>
               <label for="nome">Nome</label>
               <input type="text" id="nome" name="nome" required placeholder="Ex: Lixeira Praça Central"/>
             </div>
-
             <div>
               <label for="identificador_unico">Identificador Único</label>
               <input type="text" id="identificador_unico" name="identificador_unico" required placeholder="Ex: LX-001"/>
             </div>
-
             <div>
               <label for="endereco">Endereço</label>
               <input type="text" id="endereco" name="endereco" required placeholder="Ex: Rua das Flores, 123, Centro"/>
             </div>
-
             <div>
               <label for="latitude">Latitude</label>
               <input type="number" step="any" id="latitude" name="latitude" required placeholder="Ex: -28.2622"/>
             </div>
-
             <div>
               <label for="longitude">Longitude</label>
               <input type="number" step="any" id="longitude" name="longitude" required placeholder="Ex: -52.4069"/>
             </div>
-
             <div>
               <label for="capacidade_total_estimada">Capacidade Total Estimada (L)</label>
               <input type="number" step="0.01" id="capacidade_total_estimada" name="capacidade_total_estimada" required placeholder="Ex: 120"/>
             </div>
-
             <div>
               <label for="nivel_atual_ocupacao">Nível Atual de Ocupação (L)</label>
               <input type="number" step="0.01" id="nivel_atual_ocupacao" name="nivel_atual_ocupacao" required placeholder="Ex: 45"/>
             </div>
-
             <div>
               <label for="status_tampa">Status da Tampa</label>
               <select id="status_tampa" name="status_tampa" required>
@@ -522,7 +713,6 @@
                 <option value="fechada">Fechada</option>
               </select>
             </div>
-
             <div>
               <label for="status_operacional">Status Operacional</label>
               <select id="status_operacional" name="status_operacional" required>
@@ -531,31 +721,27 @@
                 <option value="inativa">Inativa</option>
               </select>
             </div>
-
             <button type="submit">Cadastrar Lixeira</button>
           </form>
         </div>
       </div>
 
+      <!-- CADASTRAR USUÁRIO -->
       <div id="view-cadastrar-usuario" class="view">
         <div id="topo">
           <h2>Cadastrar Usuário</h2>
           <p>Gerencie os usuários do sistema</p>
         </div>
-
         <div id="form-usuario-container">
           <form method="POST" action="/usuarios">
-
             <div>
               <label for="email">E-mail</label>
               <input type="email" name="email" id="email" required placeholder="usuario@email.com"/>
             </div>
-
             <div>
               <label for="senha">Senha</label>
               <input type="password" name="senha" id="senha" required placeholder="••••••••"/>
             </div>
-
             <button type="submit">Cadastrar Usuário</button>
           </form>
         </div>
@@ -563,6 +749,90 @@
 
     </div>
   </div>
+
+  <!-- ══════════════════════════════════════
+       MODAL — EDITAR LIXEIRA
+  ══════════════════════════════════════ -->
+  <div id="modal-editar" class="modal-overlay" onclick="fecharModalEditar(event)">
+    <div class="modal-box">
+      <h3>✏️ Editar Lixeira</h3>
+      <p class="modal-sub">Altere os dados e salve as mudanças</p>
+
+      <input type="hidden" id="edit-id"/>
+
+      <div class="campo">
+        <label>Nome</label>
+        <input type="text" id="edit-nome" placeholder="Nome da lixeira"/>
+      </div>
+      <div class="campo">
+        <label>Identificador Único</label>
+        <input type="text" id="edit-identificador_unico" placeholder="Ex: LX-001"/>
+      </div>
+      <div class="campo">
+        <label>Endereço</label>
+        <input type="text" id="edit-endereco" placeholder="Endereço completo"/>
+      </div>
+      <div style="display:flex;gap:16px;">
+        <div class="campo" style="flex:1">
+          <label>Latitude</label>
+          <input type="number" step="any" id="edit-latitude" placeholder="-28.2622"/>
+        </div>
+        <div class="campo" style="flex:1">
+          <label>Longitude</label>
+          <input type="number" step="any" id="edit-longitude" placeholder="-52.4069"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;">
+        <div class="campo" style="flex:1">
+          <label>Capacidade Total (L)</label>
+          <input type="number" step="0.01" id="edit-capacidade_total_estimada" placeholder="120"/>
+        </div>
+        <div class="campo" style="flex:1">
+          <label>Nível Atual (L)</label>
+          <input type="number" step="0.01" id="edit-nivel_atual_ocupacao" placeholder="45"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;">
+        <div class="campo" style="flex:1">
+          <label>Status da Tampa</label>
+          <select id="edit-status_tampa">
+            <option value="aberta">Aberta</option>
+            <option value="fechada">Fechada</option>
+          </select>
+        </div>
+        <div class="campo" style="flex:1">
+          <label>Status Operacional</label>
+          <select id="edit-status_operacional">
+            <option value="ativa">Ativa</option>
+            <option value="inativa">Inativa</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-acoes">
+        <button class="btn-cancelar" onclick="fecharModal('modal-editar')">Cancelar</button>
+        <button class="btn-confirmar" onclick="salvarEdicao()">💾 Salvar Alterações</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MODAL — CONFIRMAR EXCLUSÃO
+  ══════════════════════════════════════ -->
+  <div id="modal-confirmar-deletar" class="modal-overlay" onclick="fecharModalDeletar(event)">
+    <div class="modal-box">
+      <div class="icone-aviso">🗑️</div>
+      <h3>Excluir Lixeira?</h3>
+      <p id="texto-confirmar-deletar">Essa ação não pode ser desfeita.</p>
+      <div class="modal-acoes">
+        <button class="btn-cancelar" onclick="fecharModal('modal-confirmar-deletar')">Cancelar</button>
+        <button class="btn-confirmar btn-confirmar-deletar" onclick="confirmarDelecao()">🗑️ Sim, excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -573,13 +843,15 @@
     const views = ['dashboard', 'mapa', 'cadastrar-lixeira', 'cadastrar-usuario'];
     let mapaIniciado = false;
     let mapaInstance = null;
+    let lixeiraParaDeletar = null; // { id, nome }
 
+    /* ────────────────────────────────────
+       NAVEGAÇÃO
+    ──────────────────────────────────── */
     function mostrar(view) {
       views.forEach(v => {
         const el = document.getElementById('view-' + v);
-        if (el) {
-          el.classList.remove('ativa');
-        }
+        if (el) el.classList.remove('ativa');
       });
 
       const alvo = document.getElementById('view-' + view);
@@ -588,11 +860,12 @@
       document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
       event.currentTarget.classList.add('active');
 
-      if (view === 'mapa' && !mapaIniciado) {
-        iniciarMapa();
-      }
+      if (view === 'mapa' && !mapaIniciado) iniciarMapa();
     }
 
+    /* ────────────────────────────────────
+       UTILITÁRIOS
+    ──────────────────────────────────── */
     function nivelColor(pct) {
       if (pct >= 80) return '#ef4444';
       if (pct >= 50) return '#f59e0b';
@@ -605,6 +878,19 @@
       return Math.min(100, Math.max(0, Math.round(pct)));
     }
 
+    /* ────────────────────────────────────
+       TOAST
+    ──────────────────────────────────── */
+    function mostrarToast(msg, tipo = 'sucesso') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `visivel ${tipo}`;
+      setTimeout(() => { t.className = ''; }, 3200);
+    }
+
+    /* ────────────────────────────────────
+       TABELA
+    ──────────────────────────────────── */
     function renderTabela(lixeiras) {
       const total = lixeiras.length;
       const ativas = lixeiras.filter(l => l.status_operacional === 'ativa').length;
@@ -622,12 +908,13 @@
 
       const rows = lixeiras.map(l => {
         const pct = calcularPct(l);
+        const dadosJson = encodeURIComponent(JSON.stringify(l));
         return `
           <tr>
             <td style="font-weight:bold">${l.identificador_unico}</td>
             <td>${l.nome}</td>
-            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${l.endereco}">${l.endereco}</td>
-            <td style="min-width:130px">
+            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${l.endereco}">${l.endereco}</td>
+            <td style="min-width:120px">
               <span class="nivel-texto">${pct}%</span>
               <div class="nivel-bar">
                 <div class="nivel-fill" style="width:${pct}%;background:${nivelColor(pct)}"></div>
@@ -635,6 +922,11 @@
             </td>
             <td><span class="badge badge-${l.status_tampa}">${l.status_tampa}</span></td>
             <td><span class="badge badge-${l.status_operacional}">${l.status_operacional}</span></td>
+            <td style="white-space:nowrap">
+              <button class="btn-acao btn-editar" onclick='abrirModalEditar(${JSON.stringify(l)})'>✏️ Editar</button>
+              &nbsp;
+              <button class="btn-acao btn-deletar" onclick='abrirModalDeletar(${JSON.stringify({ id: l.id ?? l.identificador_unico, nome: l.nome })})'>🗑️ Excluir</button>
+            </td>
           </tr>`;
       }).join('');
 
@@ -649,6 +941,7 @@
                 <th>Nível</th>
                 <th>Tampa</th>
                 <th>Status</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -662,7 +955,6 @@
           <div class="spinner"></div>
           Buscando lixeiras da API...
         </div>`;
-
       document.getElementById('card-total').textContent = '—';
       document.getElementById('card-ativas').textContent = '—';
       document.getElementById('card-inativas').textContent = '—';
@@ -672,10 +964,7 @@
         if (!res.ok) throw new Error(`Erro HTTP ${res.status} — ${res.statusText}`);
         const dados = await res.json();
         renderTabela(dados);
-
-        if (mapaIniciado) {
-          adicionarMarcadores(dados);
-        }
+        if (mapaIniciado) adicionarMarcadores(dados);
       } catch (err) {
         document.getElementById('tabela-wrapper').innerHTML = `
           <div class="error-msg">
@@ -686,11 +975,104 @@
       }
     }
 
+    /* ────────────────────────────────────
+       MODAL — EDITAR
+    ──────────────────────────────────── */
+    function abrirModalEditar(lixeira) {
+      document.getElementById('edit-id').value                       = lixeira.id ?? lixeira.identificador_unico;
+      document.getElementById('edit-nome').value                     = lixeira.nome ?? '';
+      document.getElementById('edit-identificador_unico').value      = lixeira.identificador_unico ?? '';
+      document.getElementById('edit-endereco').value                 = lixeira.endereco ?? '';
+      document.getElementById('edit-latitude').value                 = lixeira.latitude ?? '';
+      document.getElementById('edit-longitude').value                = lixeira.longitude ?? '';
+      document.getElementById('edit-capacidade_total_estimada').value = lixeira.capacidade_total_estimada ?? '';
+      document.getElementById('edit-nivel_atual_ocupacao').value     = lixeira.nivel_atual_ocupacao ?? '';
+      document.getElementById('edit-status_tampa').value             = lixeira.status_tampa ?? 'fechada';
+      document.getElementById('edit-status_operacional').value       = lixeira.status_operacional ?? 'ativa';
+
+      document.getElementById('modal-editar').classList.add('aberto');
+    }
+
+    function fecharModalEditar(event) {
+      if (event && event.target !== document.getElementById('modal-editar')) return;
+      fecharModal('modal-editar');
+    }
+
+    async function salvarEdicao() {
+      const id = document.getElementById('edit-id').value;
+
+      const payload = {
+        nome:                      document.getElementById('edit-nome').value,
+        identificador_unico:       document.getElementById('edit-identificador_unico').value,
+        endereco:                  document.getElementById('edit-endereco').value,
+        latitude:                  parseFloat(document.getElementById('edit-latitude').value),
+        longitude:                 parseFloat(document.getElementById('edit-longitude').value),
+        capacidade_total_estimada: parseFloat(document.getElementById('edit-capacidade_total_estimada').value),
+        nivel_atual_ocupacao:      parseFloat(document.getElementById('edit-nivel_atual_ocupacao').value),
+        status_tampa:              document.getElementById('edit-status_tampa').value,
+        status_operacional:        document.getElementById('edit-status_operacional').value,
+      };
+
+      try {
+        const res = await fetch(`/lixeiras/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`Erro HTTP ${res.status}`);
+
+        fecharModal('modal-editar');
+        mostrarToast('✅ Lixeira atualizada com sucesso!', 'sucesso');
+        carregarLixeiras();
+      } catch (err) {
+        mostrarToast(`❌ Erro ao salvar: ${err.message}`, 'erro');
+      }
+    }
+
+    /* ────────────────────────────────────
+       MODAL — DELETAR
+    ──────────────────────────────────── */
+    function abrirModalDeletar({ id, nome }) {
+      lixeiraParaDeletar = { id, nome };
+      document.getElementById('texto-confirmar-deletar').textContent =
+        `Tem certeza que deseja excluir a lixeira "${nome}"? Essa ação não pode ser desfeita.`;
+      document.getElementById('modal-confirmar-deletar').classList.add('aberto');
+    }
+
+    function fecharModalDeletar(event) {
+      if (event && event.target !== document.getElementById('modal-confirmar-deletar')) return;
+      fecharModal('modal-confirmar-deletar');
+    }
+
+    async function confirmarDelecao() {
+      if (!lixeiraParaDeletar) return;
+      const { id, nome } = lixeiraParaDeletar;
+
+      try {
+        const res = await fetch(`/lixeiras/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error(`Erro HTTP ${res.status}`);
+
+        fecharModal('modal-confirmar-deletar');
+        mostrarToast(`🗑️ Lixeira "${nome}" excluída.`, 'sucesso');
+        lixeiraParaDeletar = null;
+        carregarLixeiras();
+      } catch (err) {
+        mostrarToast(`❌ Erro ao excluir: ${err.message}`, 'erro');
+      }
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).classList.remove('aberto');
+    }
+
+    /* ────────────────────────────────────
+       MAPA
+    ──────────────────────────────────── */
     let marcadores = [];
 
     function iniciarMapa() {
       mapaIniciado = true;
-
       mapaInstance = L.map('mapa-central').setView([-28.2622, -52.4069], 13);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -710,17 +1092,14 @@
 
       lixeiras.forEach(l => {
         if (!l.latitude || !l.longitude) return;
-
         const pct = calcularPct(l);
         const cor = nivelColor(pct);
 
         const icone = L.divIcon({
           className: '',
           html: `<div style="
-            background:${cor};
-            width:16px;height:16px;
-            border-radius:50%;
-            border:3px solid white;
+            background:${cor};width:16px;height:16px;
+            border-radius:50%;border:3px solid white;
             box-shadow:0 2px 6px rgba(0,0,0,0.3);
           "></div>`,
           iconSize: [16, 16],
@@ -741,6 +1120,7 @@
         marcadores.push(marker);
       });
     }
+
     carregarLixeiras();
   </script>
 

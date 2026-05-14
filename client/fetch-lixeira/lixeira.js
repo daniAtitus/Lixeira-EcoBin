@@ -54,3 +54,8 @@ async function carregarLixeiras() {
   }
 }
 carregarLixeiras();
+
+
+async function editaLixeira() {
+  
+}

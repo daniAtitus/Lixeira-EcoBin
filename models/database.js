@@ -47,6 +47,11 @@ const Lixeira = {
     return db.prepare(`SELECT * FROM lixeiras WHERE id = ?`).get(id);
   },
 
+
+  deletarLixeira(id) {
+  return db.prepare(`DELETE FROM lixeiras WHERE id = ?`).run(id);
+  },
+
   cadastrarLixeiras(dados) {
     const {
       nome, identificador_unico, endereco, latitude, longitude,
