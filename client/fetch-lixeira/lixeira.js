@@ -41,3 +41,16 @@
       alert("Erro na requisição");
     }
   });
+
+
+async function carregarLixeiras() {
+  try {
+    const res = await fetch('/lixeiras');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const dados = await res.json();
+    renderTabela(dados); 
+  } catch (err) {
+    
+  }
+}
+carregarLixeiras();

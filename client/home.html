@@ -4,327 +4,397 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel EcoBin Smart</title>
-  
-   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    body{
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow-y: auto;
     }
 
-    #painel{
-      width:100%;
-      height:100%;
+    #painel {
+      width: 100%;
+      height: 100%;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(10px);
-      overflow:hidden;
-      display:flex;
-      box-shadow:0 10px 40px rgba(0,0,0,0.4);
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
     }
 
-    #menu{
-      width:260px;
+    #menu {
+      width: 260px;
       background: linear-gradient(160deg, #10b981, #065f46);
-      padding:30px 20px;
-      color:white;
+      padding: 30px 20px;
+      color: white;
+      flex-shrink: 0;
     }
 
-    #logo{
-      text-align:center;
-      margin-bottom:40px;
+    #logo {
+      text-align: center;
+      margin-bottom: 40px;
     }
 
-    #logo h1{
-      font-size:30px;
-      margin-top:10px;
+    #logo h1 {
+      font-size: 30px;
+      margin-top: 10px;
     }
 
-    #logo p{
-      font-size:14px;
-      opacity:0.8;
+    #logo p {
+      font-size: 14px;
+      opacity: 0.8;
     }
 
-    .menu-item{
-      width:100%;
-      padding:16px;
-      margin-bottom:15px;
-      border-radius:12px;
-      cursor:pointer;
-      transition:0.3s;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:16px;
-      font-weight:bold;
+    .menu-item {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: none;
+      border: none;
+      text-align: left;
     }
 
-    .menu-item:hover{
+    .menu-item:hover {
       background: rgba(255,255,255,0.15);
-      transform:translateX(5px);
+      transform: translateX(5px);
     }
 
-
-    #conteudo{
-        flex:1;
-        background:white;
-        padding:40px;
-        overflow:auto;
-        display:none;
+    .menu-item.active {
+      background: rgba(255,255,255,0.2);
     }
 
-    .ativa{
-        display:block !important;
+    #conteudo {
+      flex: 1;
+      background: white;
+      padding: 40px;
+      overflow: auto;
     }
 
-    #form-lixeira, #form-usuario{
-        width: 700px;
-        height: 700px;
-
-        background: white;
-        border-radius: 8px;
-
-        padding: 35px;
-        margin: auto;
-
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-
-        overflow-y: auto;
-        display: none;
-    }
-    
-    .ativa-lixeira{
-      display:block !important;
+    .view {
+      display: none;
     }
 
-#form-lixeira form{
-    width: 100%;
-}
-
-#form-lixeira div{
-    margin-bottom: 18px;
-    display: flex;
-    flex-direction: column;
-}
-
-#form-lixeira label{
-    color: #065f46;
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-#form-lixeira input,
-#form-lixeira select{
-    width: 100%;
-    padding: 14px;
-
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-
-    background: #f8fafc;
-    font-size: 14px;
-
-    outline: none;
-    transition: 0.3s;
-}
-
-#form-lixeira input:focus,
-#form-lixeira select:focus{
-    border-color: #10b981;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
-}
-
-#form-lixeira button{
-    width: 100%;
-    padding: 15px;
-
-    border: none;
-    border-radius: 6px;
-
-    background: linear-gradient(135deg, #10b981, #059669);
-
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#form-lixeira button:hover{
-    opacity: 0.9;
-    transform: translateY(-2px);
-}
-
-  #form-usuario{
-    width: 700px;
-    height: 700px;
-
-    background: white;
-    border-radius: 8px;
-
-    padding: 35px;
-    margin: auto;
-
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-
-    overflow-y: auto;
-    display: none;
-  }
-
-  .ativa-usuario{
-    display:block !important;
-  }
-
-  #mapa-central{
-    display:none;
-    width: 1100px;
-    height: 600px;
-    margin: 0 auto;
-    overflow-y: auto;
-    position: absolute;
-    border-radius: 5px;
-    margin-left: 17%;
-    border: 3px solid black;
-}
-
-.ativa-mapa{
-  display:block !important;
-}
-
-.controls {
-    margin-bottom: 15px;
-    display: flex;
-    gap: 10px;
-}
-
-.controls input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-    #topo{
-      margin-bottom:30px;
+    .view.ativa {
+      display: block;
     }
 
-    #topo h2{
-      color:#065f46;
-      font-size:32px;
+    #topo {
+      margin-bottom: 30px;
     }
 
-    #topo p{
-      color:#64748b;
-      margin-top:8px;
+    #topo h2 {
+      color: #065f46;
+      font-size: 32px;
     }
 
-
-    .cards{
-      display:flex;
-      gap:20px;
-      margin-bottom:35px;
-      flex-wrap:wrap;
+    #topo p {
+      color: #64748b;
+      margin-top: 8px;
     }
 
-    .card{
-      flex:1;
-      min-width:200px;
-      background:#f1f5f9;
-      border-radius:16px;
-      padding:25px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 35px;
+      flex-wrap: wrap;
     }
 
-    .card h3{
-      color:#065f46;
-      margin-bottom:10px;
+    .card {
+      flex: 1;
+      min-width: 200px;
+      background: #f1f5f9;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
-    .card p{
-      font-size:28px;
-      font-weight:bold;
-      color:#0f172a;
+    .card h3 {
+      color: #065f46;
+      margin-bottom: 10px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      background:white;
-      border-radius:15px;
-      overflow:hidden;
-      box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    .card p {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f172a;
     }
 
-    thead{
-      background:#10b981;
-      color:white;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    th, td{
-      padding:16px;
-      text-align:left;
+    thead {
+      background: #10b981;
+      color: white;
     }
 
-    tbody tr:nth-child(even){
-      background:#f8fafc;
+    th, td {
+      padding: 16px;
+      text-align: left;
     }
 
-    tbody tr:hover{
-      background:#ecfdf5;
+    tbody tr:nth-child(even) {
+      background: #f8fafc;
     }
 
-    .status{
-      padding:6px 12px;
-      border-radius:20px;
-      font-size:13px;
-      font-weight:bold;
-      display:inline-block;
+    tbody tr:hover {
+      background: #ecfdf5;
     }
 
-    .ativo{
-      background:#bbf7d0;
-      color:#166534;
+    .badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
     }
 
-    .cheio{
-      background:#fecaca;
-      color:#991b1b;
+    .badge-ativa {
+      background: #bbf7d0;
+      color: #166534;
     }
 
+    .badge-inativa {
+      background: #fecaca;
+      color: #991b1b;
+    }
 
-    .botao{
-      margin-top:30px;
-      padding:15px 20px;
-      border:none;
-      border-radius:12px;
+    .badge-aberta {
+      background: #fde68a;
+      color: #92400e;
+    }
+
+    .badge-fechada {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .nivel-bar {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .nivel-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .nivel-texto {
+      font-size: 12px;
+      font-weight: bold;
+      color: #475569;
+    }
+
+    .loading-msg {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #64748b;
+      font-size: 15px;
+      padding: 40px 0;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #10b981;
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 16px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .error-msg code {
+      background: rgba(0,0,0,0.06);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .botao {
+      margin-top: 20px;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
       background: linear-gradient(135deg, #10b981, #059669);
-      color:white;
-      font-size:16px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:0.3s;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    .botao:hover{
-      transform:translateY(-2px);
-      box-shadow:0 8px 20px rgba(16,185,129,0.3);
+    .botao:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16,185,129,0.3);
     }
 
+    #form-lixeira-container {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    #form-lixeira-container form div {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #form-lixeira-container label {
+      color: #065f46;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    #form-lixeira-container input,
+    #form-lixeira-container select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    #form-lixeira-container input:focus,
+    #form-lixeira-container select:focus {
+      border-color: #10b981;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+    }
+
+    #form-lixeira-container button[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #form-lixeira-container button[type="submit"]:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    #form-usuario-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 35px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    }
+
+    #form-usuario-container div {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #form-usuario-container label {
+      color: #065f46;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    #form-usuario-container input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    #form-usuario-container input:focus {
+      border-color: #10b981;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+    }
+
+    #form-usuario-container button[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 8px;
+    }
+
+    #form-usuario-container button[type="submit"]:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    #mapa-central {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
@@ -336,219 +406,343 @@
       <div id="logo">
         <div style="font-size:70px;">🗑️</div>
         <h1>EcoBin</h1>
-        <p>Painel</p>
+        <p>Painel Smart</p>
       </div>
 
-      <div class="menu-item" id = "listar-lixeira" onclick="mostrar('conteudo')">
+      <button class="menu-item active" onclick="mostrar('dashboard')">
         📋 Listar Lixeiras
-      </div>
+      </button>
 
-      <div class="menu-item" id = "mapa" onclick="mostrar('mapa-central')">
+      <button class="menu-item" onclick="mostrar('mapa')">
         🗺️ Mapa
-      </div>
+      </button>
 
-      <div class="menu-item" id = "cadastrar-lixeira" onclick="mostrar('form-lixeira')">
+      <button class="menu-item" onclick="mostrar('cadastrar-lixeira')">
         ➕ Cadastrar Lixeira
-      </div>
+      </button>
 
-      <div class="menu-item" id = "cadastrar-usuario" onclick="mostrar('form-usuario')">
-           👤 Cadastrar usuário
-      </div>
-
-
+      <button class="menu-item" onclick="mostrar('cadastrar-usuario')">
+        👤 Cadastrar Usuário
+      </button>
 
     </div>
 
     <div id="conteudo">
 
-      <div id="topo">
-        <h2>Dashboard</h2>
-        <p>Monitoramento inteligente das lixeiras urbanas</p>
+      <div id="view-dashboard" class="view ativa">
+
+        <div id="topo">
+          <h2>Dashboard</h2>
+          <p>Monitoramento inteligente das lixeiras urbanas</p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Total de Lixeiras</h3>
+            <p id="card-total">—</p>
+          </div>
+          <div class="card">
+            <h3>Lixeiras Ativas</h3>
+            <p id="card-ativas">—</p>
+          </div>
+          <div class="card">
+            <h3>Lixeiras Inativas</h3>
+            <p id="card-inativas">—</p>
+          </div>
+        </div>
+
+        <div id="tabela-wrapper">
+          <div class="loading-msg">
+            <div class="spinner"></div>
+            Buscando lixeiras da API...
+          </div>
+        </div>
+
+        <button class="botao" onclick="carregarLixeiras()">🔄 Recarregar</button>
+
       </div>
 
-      <div class="cards">
-
-        <div class="card">
-          <h3>Total de Lixeiras</h3>
-          <p>128</p>
+      <div id="view-mapa" class="view">
+        <div id="topo">
+          <h2>Mapa</h2>
+          <p>Localização das lixeiras em tempo real</p>
         </div>
-
-        <div class="card">
-          <h3>Lixeiras Ativas</h3>
-          <p>113</p>
-        </div>
-
-        <div class="card">
-          <h3>Lixeiras Cheias</h3>
-          <p>15</p>
-        </div>
-
+        <div id="mapa-central"></div>
       </div>
 
-      <table>
+      <div id="view-cadastrar-lixeira" class="view">
+        <div id="topo">
+          <h2>Cadastrar Lixeira</h2>
+          <p>Adicione uma nova lixeira ao sistema</p>
+        </div>
 
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Localização</th>
-            <th>Nível</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+        <div id="form-lixeira-container">
+          <form action="/lixeiras" method="POST" id="formCadastroLixeira">
 
-        <tbody>
+            <div>
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" required placeholder="Ex: Lixeira Praça Central"/>
+            </div>
 
-          <tr>
-            <td>#001</td>
-            <td>Centro</td>
-            <td>35%</td>
-            <td>
-              <span class="status ativo">Ativa</span>
-            </td>
-          </tr>
+            <div>
+              <label for="identificador_unico">Identificador Único</label>
+              <input type="text" id="identificador_unico" name="identificador_unico" required placeholder="Ex: LX-001"/>
+            </div>
 
-          <tr>
-            <td>#002</td>
-            <td>Parque Municipal</td>
-            <td>92%</td>
-            <td>
-              <span class="status cheio">Cheia</span>
-            </td>
-          </tr>
+            <div>
+              <label for="endereco">Endereço</label>
+              <input type="text" id="endereco" name="endereco" required placeholder="Ex: Rua das Flores, 123, Centro"/>
+            </div>
 
-          <tr>
-            <td>#003</td>
-            <td>Shopping</td>
-            <td>60%</td>
-            <td>
-              <span class="status ativo">Ativa</span>
-            </td>
-          </tr>
+            <div>
+              <label for="latitude">Latitude</label>
+              <input type="number" step="any" id="latitude" name="latitude" required placeholder="Ex: -28.2622"/>
+            </div>
 
-        </tbody>
+            <div>
+              <label for="longitude">Longitude</label>
+              <input type="number" step="any" id="longitude" name="longitude" required placeholder="Ex: -52.4069"/>
+            </div>
 
-      </table>
+            <div>
+              <label for="capacidade_total_estimada">Capacidade Total Estimada (L)</label>
+              <input type="number" step="0.01" id="capacidade_total_estimada" name="capacidade_total_estimada" required placeholder="Ex: 120"/>
+            </div>
+
+            <div>
+              <label for="nivel_atual_ocupacao">Nível Atual de Ocupação (L)</label>
+              <input type="number" step="0.01" id="nivel_atual_ocupacao" name="nivel_atual_ocupacao" required placeholder="Ex: 45"/>
+            </div>
+
+            <div>
+              <label for="status_tampa">Status da Tampa</label>
+              <select id="status_tampa" name="status_tampa" required>
+                <option value="">Selecione</option>
+                <option value="aberta">Aberta</option>
+                <option value="fechada">Fechada</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="status_operacional">Status Operacional</label>
+              <select id="status_operacional" name="status_operacional" required>
+                <option value="">Selecione</option>
+                <option value="ativa">Ativa</option>
+                <option value="inativa">Inativa</option>
+              </select>
+            </div>
+
+            <button type="submit">Cadastrar Lixeira</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="view-cadastrar-usuario" class="view">
+        <div id="topo">
+          <h2>Cadastrar Usuário</h2>
+          <p>Gerencie os usuários do sistema</p>
+        </div>
+
+        <div id="form-usuario-container">
+          <form method="POST" action="/usuarios">
+
+            <div>
+              <label for="email">E-mail</label>
+              <input type="email" name="email" id="email" required placeholder="usuario@email.com"/>
+            </div>
+
+            <div>
+              <label for="senha">Senha</label>
+              <input type="password" name="senha" id="senha" required placeholder="••••••••"/>
+            </div>
+
+            <button type="submit">Cadastrar Usuário</button>
+          </form>
+        </div>
+      </div>
 
     </div>
-
-
-    <div id = "form-lixeira">
-              <form action="/lixeiras" method="POST" id="formCadastroLixeira">
-    
-    <div>
-      <label for="nome">Nome</label>
-      <input type="text" id="nome" name="nome" required />
-    </div>
-
-      <div>
-        <label for="identificador_unico">Identificador Único</label>
-        <input
-          type="text"
-          id="identificador_unico"
-          name="identificador_unico"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="endereco">Endereço</label>
-        <input type="text" id="endereco" name="endereco" required />
-      </div>
-
-      <div>
-        <label for="latitude">Latitude</label>
-        <input
-          type="number"
-          step="any"
-          id="latitude"
-          name="latitude"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="longitude">Longitude</label>
-        <input
-          type="number"
-          step="any"
-          id="longitude"
-          name="longitude"
-          required
-        />
-      </div>
-
-        <div>
-          <label for="capacidade_total_estimada">
-            Capacidade Total Estimada
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            id="capacidade_total_estimada"
-            name="capacidade_total_estimada"
-            required
-          />
-        </div>
-
-        <div>
-          <label for="nivel_atual_ocupacao">
-            Nível Atual de Ocupação
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            id="nivel_atual_ocupacao"
-            name="nivel_atual_ocupacao"
-            required
-          />
-        </div>
-
-        <div>
-          <label for="status_tampa">Status da Tampa</label>
-          <select id="status_tampa" name="status_tampa" required>
-            <option value="">Selecione</option>
-            <option value="aberta">Aberta</option>
-            <option value="fechada">Fechada</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="status_operacional">Status Operacional</label>
-          <select
-            id="status_operacional"
-            name="status_operacional"
-            required
-          >
-            <option value="">Selecione</option>
-            <option value="ativa">Ativa</option>
-            <option value="inativa">Inativa</option>
-          </select>
-        </div>
-
-        <button type="submit">Cadastrar Lixeira</button>
-      </form>
-  </div>
-    <div id = "form-usuario">
-      <form method="POST" action="/usuarios" >
-          <input type = "text" name="email">
-          <input type = "password" name = "senha">
-          <input type = "submit">
-      </form>
-    </div>
-
   </div>
 
-  <div id="mapa-central">
-        
-    </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
 
-    <script src = "script-buttons/script.js"></script>
-  
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-    <script src = "./map.js"></script>
-    <script src = "fetch-lixeira/lixeira.js"></script>
-    
+  <script>
+
+    const views = ['dashboard', 'mapa', 'cadastrar-lixeira', 'cadastrar-usuario'];
+    let mapaIniciado = false;
+    let mapaInstance = null;
+
+    function mostrar(view) {
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) {
+          el.classList.remove('ativa');
+        }
+      });
+
+      const alvo = document.getElementById('view-' + view);
+      if (alvo) alvo.classList.add('ativa');
+
+      document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      if (view === 'mapa' && !mapaIniciado) {
+        iniciarMapa();
+      }
+    }
+
+    function nivelColor(pct) {
+      if (pct >= 80) return '#ef4444';
+      if (pct >= 50) return '#f59e0b';
+      return '#10b981';
+    }
+
+    function calcularPct(lixeira) {
+      if (!lixeira.capacidade_total_estimada || lixeira.capacidade_total_estimada === 0) return 0;
+      const pct = (lixeira.nivel_atual_ocupacao / lixeira.capacidade_total_estimada) * 100;
+      return Math.min(100, Math.max(0, Math.round(pct)));
+    }
+
+    function renderTabela(lixeiras) {
+      const total = lixeiras.length;
+      const ativas = lixeiras.filter(l => l.status_operacional === 'ativa').length;
+      const inativas = total - ativas;
+
+      document.getElementById('card-total').textContent = total;
+      document.getElementById('card-ativas').textContent = ativas;
+      document.getElementById('card-inativas').textContent = inativas;
+
+      if (total === 0) {
+        document.getElementById('tabela-wrapper').innerHTML =
+          '<p style="color:#64748b;font-size:14px;padding:20px 0">Nenhuma lixeira cadastrada.</p>';
+        return;
+      }
+
+      const rows = lixeiras.map(l => {
+        const pct = calcularPct(l);
+        return `
+          <tr>
+            <td style="font-weight:bold">${l.identificador_unico}</td>
+            <td>${l.nome}</td>
+            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${l.endereco}">${l.endereco}</td>
+            <td style="min-width:130px">
+              <span class="nivel-texto">${pct}%</span>
+              <div class="nivel-bar">
+                <div class="nivel-fill" style="width:${pct}%;background:${nivelColor(pct)}"></div>
+              </div>
+            </td>
+            <td><span class="badge badge-${l.status_tampa}">${l.status_tampa}</span></td>
+            <td><span class="badge badge-${l.status_operacional}">${l.status_operacional}</span></td>
+          </tr>`;
+      }).join('');
+
+      document.getElementById('tabela-wrapper').innerHTML = `
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Endereço</th>
+                <th>Nível</th>
+                <th>Tampa</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    async function carregarLixeiras() {
+      document.getElementById('tabela-wrapper').innerHTML = `
+        <div class="loading-msg">
+          <div class="spinner"></div>
+          Buscando lixeiras da API...
+        </div>`;
+
+      document.getElementById('card-total').textContent = '—';
+      document.getElementById('card-ativas').textContent = '—';
+      document.getElementById('card-inativas').textContent = '—';
+
+      try {
+        const res = await fetch('/lixeiras');
+        if (!res.ok) throw new Error(`Erro HTTP ${res.status} — ${res.statusText}`);
+        const dados = await res.json();
+        renderTabela(dados);
+
+        if (mapaIniciado) {
+          adicionarMarcadores(dados);
+        }
+      } catch (err) {
+        document.getElementById('tabela-wrapper').innerHTML = `
+          <div class="error-msg">
+            ⚠️ Não foi possível carregar os dados:<br>
+            <strong>${err.message}</strong><br><br>
+            <span style="font-size:13px">Verifique se a API está disponível em <code>/lixeiras</code> e tente novamente.</span>
+          </div>`;
+      }
+    }
+
+    let marcadores = [];
+
+    function iniciarMapa() {
+      mapaIniciado = true;
+
+      mapaInstance = L.map('mapa-central').setView([-28.2622, -52.4069], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      }).addTo(mapaInstance);
+
+      fetch('/lixeiras')
+        .then(res => res.ok ? res.json() : Promise.reject(res.statusText))
+        .then(dados => adicionarMarcadores(dados))
+        .catch(err => console.error('Erro ao carregar lixeiras para o mapa:', err));
+    }
+
+    function adicionarMarcadores(lixeiras) {
+      marcadores.forEach(m => mapaInstance.removeLayer(m));
+      marcadores = [];
+
+      lixeiras.forEach(l => {
+        if (!l.latitude || !l.longitude) return;
+
+        const pct = calcularPct(l);
+        const cor = nivelColor(pct);
+
+        const icone = L.divIcon({
+          className: '',
+          html: `<div style="
+            background:${cor};
+            width:16px;height:16px;
+            border-radius:50%;
+            border:3px solid white;
+            box-shadow:0 2px 6px rgba(0,0,0,0.3);
+          "></div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+
+        const marker = L.marker([l.latitude, l.longitude], { icon: icone })
+          .addTo(mapaInstance)
+          .bindPopup(`
+            <strong>${l.nome}</strong><br>
+            ID: ${l.identificador_unico}<br>
+            Endereço: ${l.endereco}<br>
+            Nível: ${pct}%<br>
+            Tampa: ${l.status_tampa}<br>
+            Status: ${l.status_operacional}
+          `);
+
+        marcadores.push(marker);
+      });
+    }
+    carregarLixeiras();
+  </script>
+
 </body>
 </html>
