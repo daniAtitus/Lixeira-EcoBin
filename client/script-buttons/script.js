@@ -27,4 +27,14 @@ function mostrar(idDiv){
         map.invalidateSize();
         }, 200);
     }
+    if (view === 'mapa') {
+  if (!mapaIniciado) {
+    iniciarMapa();
+  } else {
+    setTimeout(() => {
+      mapaInstance.invalidateSize();
+      exibeLixeiras();
+    }, 50);
+  }
+}
 }

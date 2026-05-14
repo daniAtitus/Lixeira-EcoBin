@@ -1,56 +1,60 @@
-const map = L.map('mapa-central');
+let mapaInstance = null;
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+function iniciarMapa() {
+  mapaIniciado = true;
 
-async function buscaMapa() {
-  try {
-    const response = await fetch("http://localhost:8080/lixeiras");
+  mapaInstance = L.map('mapa-central');
 
-    if (!response.ok) {
-      throw new Error(`Response Status: ${response.status}`);
-    }
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(mapaInstance);
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
+  exibeLixeiras();
 }
 
 async function exibeLixeiras() {
-  const lixeiras = await buscaMapa();
+  try {
+    const res = await fetch('/lixeiras');
+    if (!res.ok) throw new Error(`Erro HTTP ${res.status}`);
+    const lixeiras = await res.json();
 
-  const bounds = [];
+    // Limpa marcadores anteriores
+    marcadores.forEach(m => mapaInstance.removeLayer(m));
+    marcadores = [];
 
-  lixeiras.forEach(lixeira => {
-    const lat = Number(lixeira.latitude);
-    const lng = Number(lixeira.longitude);
+    const bounds = [];
 
-    if (isNaN(lat) || isNaN(lng)) return;
+    lixeiras.forEach(lixeira => {
+      const lat = Number(lixeira.latitude);
+      const lng = Number(lixeira.longitude);
+      if (isNaN(lat) || isNaN(lng)) return;
 
-    bounds.push([lat, lng]);
+      bounds.push([lat, lng]);
 
-    const popup = `
-      <b>${lixeira.nome}</b><br>
-      <b>ID:</b> ${lixeira.identificador_unico}<br>
-      <b>Status tampa:</b> ${lixeira.status_tampa}<br>
-      <b>Status operacional:</b> ${lixeira.status_operacional}<br>
-      <b>Capacidade:</b> ${lixeira.capacidade_total_estimada}<br>
-      <b>Ocupação atual:</b> ${lixeira.nivel_atual_ocupacao}%
-    `;
+      const popup = `
+        <b>${lixeira.nome}</b><br>
+        <b>ID:</b> ${lixeira.identificador_unico}<br>
+        <b>Status tampa:</b> ${lixeira.status_tampa}<br>
+        <b>Status operacional:</b> ${lixeira.status_operacional}<br>
+        <b>Capacidade:</b> ${lixeira.capacidade_total_estimada} L<br>
+        <b>Ocupação atual:</b> ${lixeira.nivel_atual_ocupacao} L
+      `;
 
-    L.marker([lat, lng])
-      .addTo(map)
-      .bindPopup(popup);
-  });
+      const marker = L.marker([lat, lng])
+        .addTo(mapaInstance)
+        .bindPopup(popup);
 
-  if (bounds.length > 0) {
-    map.fitBounds(bounds);
-  } else {
-    map.setView([-28.223, -53.501], 13);
+      marcadores.push(marker);
+    });
+
+    if (bounds.length > 0) {
+      mapaInstance.fitBounds(bounds);
+    } else {
+      mapaInstance.setView([-28.223, -53.501], 13);
+    }
+
+  } catch (err) {
+    console.error('Erro ao carregar lixeiras no mapa:', err);
   }
 }
-
-exibeLixeiras();
